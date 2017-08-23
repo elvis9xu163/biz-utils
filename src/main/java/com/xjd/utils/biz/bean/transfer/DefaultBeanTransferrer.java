@@ -74,6 +74,16 @@ public class DefaultBeanTransferrer implements ConfigurableBeanTransferrer {
 		}
 	}
 
+	@Override
+	public <S, T> void addExtendTransferrer(Class<S> sourceClass, Class<T> targetClass, AwareTransferrer<S, T> transferrer) {
+		addExtendTransferrer(sourceClass, targetClass, (Transferrer) transferrer);
+	}
+
+	@Override
+	public <S, T> void addExtend(Class<S> sourceClass, Class<T> targetClass, Factory<T> factory, AwareTransferrer<S, T> transferrer) {
+		addExtend(sourceClass, targetClass, factory, (Transferrer) transferrer);
+	}
+
 	public <T> T transferOne(Object source, Class<T> targetClass) {
 		if (source == null) return null; // null 不处理
 
@@ -110,12 +120,16 @@ public class DefaultBeanTransferrer implements ConfigurableBeanTransferrer {
 		boolean noTransferrer = true;
 		Transferrer defaultTransferrer = getDefaultTransferrer();
 		if (defaultTransferrer != null) {
-			defaultTransferrer.transfer(source, target);
+			if (defaultTransferrer instanceof AwareTransferrer) {
+				((AwareTransferrer) defaultTransferrer).transfer(source, target, this);
+			} else {
+				defaultTransferrer.transfer(source, target);
+			}
 			noTransferrer = false;
 		}
 		for (ExtendTransferrer extendTransferrer : getExtendTransferrers()) {
 			if (extendTransferrer.canTransfer(source, target)) {
-				extendTransferrer.transfer(source, target);
+				extendTransferrer.transfer(source, target, this);
 				noTransferrer = false;
 			}
 		}
@@ -153,7 +167,7 @@ public class DefaultBeanTransferrer implements ConfigurableBeanTransferrer {
 		}
 	};
 
-	public static class ExtendTransferrer<S, T> implements Transferrer<S, T> {
+	public static class ExtendTransferrer<S, T> implements AwareTransferrer<S, T> {
 		protected Class<S> sourceClass;
 		protected Class<T> targetClass;
 		protected Transferrer<S, T> transferrer;
@@ -178,8 +192,12 @@ public class DefaultBeanTransferrer implements ConfigurableBeanTransferrer {
 		}
 
 		@Override
-		public void transfer(S s, T t) {
-			transferrer.transfer(s, t);
+		public void transfer(S s, T t, BeanTransferrer bt) {
+			if (transferrer instanceof AwareTransferrer) {
+				((AwareTransferrer) transferrer).transfer(s, t, bt);
+			} else {
+				transferrer.transfer(s, t);
+			}
 		}
 	}
 

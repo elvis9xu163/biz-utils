@@ -16,7 +16,7 @@ public interface BeanTransferrer {
 
 	<T> T transferOne(Object source, Class<T> targetClass);
 
-	default <T> List<T> transferCollection(Collection<Object> sources, Class<T> targetClass) {
+	default <T> List<T> transferCollection(Collection<?> sources, Class<T> targetClass) {
 		if (sources == null) return null;
 		if (sources.isEmpty()) return new ArrayList<>(0);
 

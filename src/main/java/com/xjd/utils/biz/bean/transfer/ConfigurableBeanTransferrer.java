@@ -12,8 +12,12 @@ public interface ConfigurableBeanTransferrer extends BeanTransferrer {
 
 	<S, T> void addExtendTransferrer(Class<S> sourceClass, Class<T> targetClass, Transferrer<S, T> transferrer);
 
+	<S, T> void addExtendTransferrer(Class<S> sourceClass, Class<T> targetClass, AwareTransferrer<S, T> transferrer);
+
 	<T> void addExtendFactory(Class<T> targetClass, Factory<T> factory);
 
 	<S, T> void addExtend(Class<S> sourceClass, Class<T> targetClass, Factory<T> factory, Transferrer<S, T> transferrer);
+
+	<S, T> void addExtend(Class<S> sourceClass, Class<T> targetClass, Factory<T> factory, AwareTransferrer<S, T> transferrer);
 
 }

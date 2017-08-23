@@ -67,4 +67,18 @@ public class BeanTransferUtilsTest {
 		System.out.println(list.get(0));
 	}
 
+	@Test
+	public void builder2() throws Exception {
+		DefaultBeanTransferrer defaultBeanTransferrer = BeanTransferUtils.builder()
+				.defaultFactory(DefaultBeanTransferrer.FACTORY_INVOKE_NO_ARG_CONSTRUCTOR)
+				.defaultTransferrer(DefaultBeanTransferrer.TRANSFERRER_COPY_PROPERTY)
+				.extendTransferrer(PersonModel.class, PersonBean.class, (s, t, bt) -> {
+					t.setPersonExtend(bt.transferOne(s.getPersonExtend(), PersonExtendBean.class));
+				})
+				.build();
+
+		List<PersonBean> list = defaultBeanTransferrer.transferCollection(Arrays.asList(personModel), PersonBean.class);
+		System.out.println(list.get(0));
+	}
+
 }

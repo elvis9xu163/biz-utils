@@ -38,6 +38,11 @@ public class BeanTransferrerBuilder {
 		return this;
 	}
 
+	public <S, T> BeanTransferrerBuilder extendTransferrer(Class<S> sourceClass, Class<T> targetClass, AwareTransferrer<S, T> transferrer) {
+		this.extendTransferrers.add(new DefaultBeanTransferrer.ExtendTransferrer<>(sourceClass, targetClass, transferrer));
+		return this;
+	}
+
 	public BeanTransferrerBuilder extendFactories(List<DefaultBeanTransferrer.ExtendFactory> extendFactories) {
 		this.extendFactories.clear();
 		if (extendFactories != null) {
@@ -52,6 +57,12 @@ public class BeanTransferrerBuilder {
 	}
 
 	public <S, T> BeanTransferrerBuilder extend(Class<S> sourceClass, Class<T> targetClass, Factory<T> factory, Transferrer<S, T> transferrer) {
+		extendTransferrer(sourceClass, targetClass, transferrer);
+		extendFactory(targetClass, factory);
+		return this;
+	}
+
+	public <S, T> BeanTransferrerBuilder extend(Class<S> sourceClass, Class<T> targetClass, Factory<T> factory, AwareTransferrer<S, T> transferrer) {
 		extendTransferrer(sourceClass, targetClass, transferrer);
 		extendFactory(targetClass, factory);
 		return this;
