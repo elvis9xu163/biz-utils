@@ -1,5 +1,6 @@
 package com.xjd.utils.biz.bean.validation;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+
+import com.xjd.utils.basic.StringUtils;
 
 /**
  * @author elvis.xu
@@ -77,6 +80,20 @@ public class Validation {
 					for (ConstraintViolation<Object> constraintViolation : constraintViolations) {
 						validationProperty.setMessage(constraintViolation.getMessage());
 						break;
+					}
+				}
+				if (validationProperty.getPropertyTitle() == null || validationProperty.getPropertyTitle().equals(validationProperty.getPropertyName())) {
+					try {
+						Field field = beanClass.getDeclaredField(validationProperty.getPropertyName());
+						ConstraintTitle constraintTitle = field.getAnnotation(ConstraintTitle.class);
+						if (constraintTitle != null) {
+							String title = constraintTitle.value();
+							if (!StringUtils.isBlank(title)) {
+								validationProperty.setPropertyTitle(title);
+							}
+						}
+					} catch (NoSuchFieldException e) {
+						// do-nothing
 					}
 				}
 				invalidProperties.add(validationProperty);

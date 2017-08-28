@@ -47,6 +47,10 @@ public class ValidationProperty {
 		return constraintViolations;
 	}
 
+	public void setPropertyTitle(String propertyTitle) {
+		this.propertyTitle = propertyTitle;
+	}
+
 	protected void setMessage(String message) {
 		this.message = message;
 	}

@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import com.xjd.utils.biz.bean.validation.constraints.EmailOrMobile;
 import com.xjd.utils.biz.bean.validation.constraints.Enum;
+import com.xjd.utils.biz.bean.validation.enums.ChannelEnum;
+import com.xjd.utils.biz.bean.validation.enums.SexEnum;
+import com.xjd.utils.biz.bean.validation.enums.StatusEnum;
 
 /**
  * @author elvis.xu
@@ -27,6 +30,7 @@ public class ValidBean {
 	@Enum(enumClass = ChannelEnum.class, message = NOT_ENUM)
 	private String channel;
 
+	@ConstraintTitle("性别")
 	@NotNull(message = NOT_NULL)
 	@Enum(enumClass = SexEnum.class, methodForValid = "validCode", message = NOT_ENUM)
 	private Byte sex;

@@ -1,4 +1,4 @@
-package com.xjd.utils.biz.bean.validation;
+package com.xjd.utils.biz.bean.validation.enums;
 
 /**
  * @author elvis.xu

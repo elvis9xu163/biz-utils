@@ -37,7 +37,7 @@ public class EnumConstraintValidator implements ConstraintValidator<Enum, Object
 		enumClass = constraintAnnotation.enumClass();
 		ObjectUtils.requireArgumentNonNull(enumClass, "enumClass is null");
 		if (!enumClass.isEnum()) {
-			throw new ValidationException("enumClass[" + enumClass + "] is not a enum class");
+			throw new ValidationException("enumClass[" + enumClass + "] is not a enums class");
 		}
 		customeValidMethodName = StringUtils.trimToNull(constraintAnnotation.methodForValid());
 	}
@@ -62,7 +62,7 @@ public class EnumConstraintValidator implements ConstraintValidator<Enum, Object
 		}
 
 		if (method == null) {
-			throw new ValidationException(String.format("no suitable method found for enum[%1$s] validation, the method signature should as: public void/boolean/Boolean/%1$s %2$s(%3$s)",
+			throw new ValidationException(String.format("no suitable method found for enums[%1$s] validation, the method signature should as: public void/boolean/Boolean/%1$s %2$s(%3$s)",
 					enumClass.getSimpleName(), methodName, value.getClass().getSimpleName()));
 		}
 
