@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.util.ClassUtils;
 
-import com.xjd.utils.basic.ObjectUtils;
+import com.xjd.utils.basic.AssertUtils;
 import com.xjd.utils.basic.StringUtils;
 import com.xjd.utils.biz.bean.validation.ValidationException;
 import com.xjd.utils.biz.bean.validation.constraints.Enum;
@@ -28,14 +28,14 @@ public class EnumConstraintValidator implements ConstraintValidator<Enum, Object
 	}
 
 	public static void setDefaultValidMethodName(String defaultValidMethodName) {
-		ObjectUtils.requireArgumentNonNull(defaultValidMethodName, "defaultValidMethodName is null");
+		AssertUtils.assertArgumentNonNull(defaultValidMethodName, "defaultValidMethodName is null");
 		EnumConstraintValidator.defaultValidMethodName = defaultValidMethodName;
 	}
 
 	@Override
 	public void initialize(Enum constraintAnnotation) {
 		enumClass = constraintAnnotation.enumClass();
-		ObjectUtils.requireArgumentNonNull(enumClass, "enumClass is null");
+		AssertUtils.assertArgumentNonNull(enumClass, "enumClass is null");
 		if (!enumClass.isEnum()) {
 			throw new ValidationException("enumClass[" + enumClass + "] is not a enums class");
 		}
